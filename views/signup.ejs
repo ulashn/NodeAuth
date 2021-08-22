@@ -1,0 +1,33 @@
+<%- include('partials/header'); -%>
+
+<form>
+    <h2>Sign Up</h2>
+    <label for="email">Email</label>
+    <input type="text" name="email" required />
+    <div class="email error"></div>
+    <label for="password">Password</label>
+    <input type="password" name="password" required />
+    <div class="password error"></div>
+    <label for="repassword">Re-write password</label>
+    <input type="password" name="repassword" required />
+    <div class="password error"></div>
+    <button type="submit">Sign up!</button>
+</form>
+
+<script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const email = form.email.value;
+        const password = form.password.value;
+        const repass = form.repassword.value;
+        if(password !== repass){
+            alert("Passwords not match!");
+        }else{
+            console.log(email,password,repass);
+        }
+    })
+</script>
+
+<%- include('partials/footer'); -%>

@@ -17,3 +17,4 @@ After cloning the repository to your local directory run these commands:
 
 - `$ npm install` this will install all the dependencies which the project uses.
 - `$ nodemon app` this will start the development server on localhost:3000
+- I used my own mongoDB account user in this project you can change it from the app.js(line 18)

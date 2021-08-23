@@ -43,6 +43,16 @@ nav li a{
 .btn{
   border-radius: 36px;
   background: #FEE996;
+  cursor: pointer;
+  box-shadow: 0 7px #999;
+}
+.btn:hover {
+  background: #ffdc4e;
+}
+.btn:active {
+  background-color: #ffdc4e;
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
 }
 form h2{
   font-size: 2.4em;

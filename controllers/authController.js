@@ -1,8 +1,9 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 // Error Handlers
 const handler = (error) => {
-    console.log(error.message, error.code);
+    //console.log(error.message, error.code);
     let err = { email: '', password: '' };
 
     // MongoDB Erros
@@ -20,6 +21,14 @@ const handler = (error) => {
     return err;
 };
 
+const tokenLife = 3 * 24 * 60 * 60; // 3 days
+
+const createToken = (id) => {
+    return jwt.sign({ id }, 'DummySecret', {
+        expiresIn: tokenLife
+    });
+}
+
 module.exports.signupGet = (req, res) => {
     res.render('signup');
 }
@@ -28,7 +37,12 @@ module.exports.signupPost = async (req, res) => {
     const { email, password } = req.body;
     try{
         const user = await User.create({ email, password });
-        res.status(201).json(user);
+        // Id comes from the mongoDB for created user.
+        const newToken = createToken(user._id);
+        // We will save it on the cookies
+        // It can not be reachable from the frontend (httpOnly property)
+        res.cookie('jwt', newToken, { httpOnly: true, maxAge: tokenLife*1000 })
+        res.status(201).json({ user: user._id });
     }catch(error){
         const errors = handler(error);
         res.status(400).send({ errors });

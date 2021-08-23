@@ -18,6 +18,16 @@ const handler = (error) => {
             err[properties.path] = properties.message;
         });
     }
+    
+    // Login Errors
+    if(error.message === 'pwerr'){
+        err.password = 'Password is not correct!';
+        return err;
+    }
+    if(error.message === 'emerr'){
+        err.email = 'Email is not found!';
+        return err;
+    }
     return err;
 };
 
@@ -41,7 +51,7 @@ module.exports.signupPost = async (req, res) => {
         const newToken = createToken(user._id);
         // We will save it on the cookies
         // It can not be reachable from the frontend (httpOnly property)
-        res.cookie('jwt', newToken, { httpOnly: true, maxAge: tokenLife*1000 })
+        res.cookie('jwt', newToken, { httpOnly: true, maxAge: tokenLife*1000 });
         res.status(201).json({ user: user._id });
     }catch(error){
         const errors = handler(error);
@@ -54,5 +64,17 @@ module.exports.loginGet = (req, res) => {
 }
 
 module.exports.loginPost = async (req, res) => {
-    res.send('User logged in!');
+    // We get the email and password data from the login form.
+    const { email, password } = req.body;
+    try{
+        // We check the static method under the User model.
+        const user = await User.login(email, password);
+        const newToken = createToken(user._id);
+        res.cookie('jwt', newToken, { httpOnly: true, maxAge: tokenLife*1000 });
+        // If there is no error then send back the user._id to the browser.
+        res.status(200).json({ user: user._id });
+    }catch(err){
+        const errors = handler(err);
+        res.status(400).json({ errors });
+    }
 }

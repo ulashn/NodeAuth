@@ -35,7 +35,21 @@ userSchema.pre('save', async function (next){
     const hasher = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, hasher);
     next();
-})
+});
+
+// Static method for login user.
+
+userSchema.statics.login = async function (email, password){
+    const user = await this.findOne({ email });
+    if(user){
+        const compared = await bcrypt.compare(password, user.password);
+        if(compared){
+            return user;
+        }
+        throw Error('pwerr');
+    }
+    throw Error('emerr');
+}
 
 const User = mongoose.model('user', userSchema);
 

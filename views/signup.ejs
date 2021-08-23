@@ -39,7 +39,7 @@
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const responseData = await res.json();
-                console.log(responseData);
+                //console.log(responseData);
                 if(responseData.errors){
                     emailError.textContent = responseData.errors.email;
                     passwordError.textContent = responseData.errors.password;

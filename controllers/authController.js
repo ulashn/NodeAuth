@@ -78,3 +78,9 @@ module.exports.loginPost = async (req, res) => {
         res.status(400).json({ errors });
     }
 }
+
+module.exports.logoutGet = async (req, res) => {
+    // We will delete the JWT in here and the user login state changes.
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.redirect('/');
+}

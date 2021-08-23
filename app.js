@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const parser = require('cookie-parser');
+const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
 const app = express();
 
@@ -20,8 +21,11 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCr
   .catch((err) => console.log(err));
 
 // routes
+// Apply the checkUser middleware for all Routes.
+app.get('*', checkUser);
 app.get('/', (req, res) => res.render('home'));
-app.get('/gamelist', (req, res) => res.render('gamelist'));
+// Authentication middleware added here.
+app.get('/gamelist', requireAuth, (req, res) => res.render('gamelist'));
 app.use(authRoutes);
 
 

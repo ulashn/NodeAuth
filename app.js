@@ -15,7 +15,7 @@ app.use(parser());
 app.set('view engine', 'ejs');
 
 // database connection
-const dbURI = 'mongodb+srv://dummyuser:dummypassword@cebellezi.yf9qv.mongodb.net/jwtauth?retryWrites=true&w=majority';
+const dbURI = "YOUR_MONGODB_ACCOUNT"
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
